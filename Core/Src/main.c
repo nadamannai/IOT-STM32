@@ -18,7 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include<stdio.h>
+#include<string.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -108,10 +109,10 @@ uint16_t TEMP,RH;
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim6);
 
-  const char *ssid = "Aizen";
-  const char *password = "nadouna3ne3i124";
+  const char *ssid = "your_ssid";
+  const char *password = "put_your_password";
   const char *apiKey = "7W362EETBWTU2K7S";
-  const char *fieldData = "field1=25";
+  char fieldData[50];
 
   // Reset ESP32
   sendATCommand("AT+RST\r\n");
@@ -137,7 +138,7 @@ uint16_t TEMP,RH;
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /*Presence = DHT22_Start();
+	  Presence = DHT22_Start();
 	  Rh_byte1 = DHT22_Read ();
 	  Rh_byte2 = DHT22_Read ();
       Temp_byte1 = DHT22_Read ();
@@ -147,8 +148,7 @@ uint16_t TEMP,RH;
 	  RH = ((Rh_byte1<<8)|Rh_byte2);
 	  Temperature = (float) (TEMP/10.0);
 	  Humidity = (float) (RH/10.0);
-      HAL_Delay(2000);*/
-
+	  sprintf(fieldData,"field1=%.2f&field2=%.2f",Temperature,Humidity);
 	  sendData(apiKey, fieldData);
 	  HAL_Delay(2000);
     /* USER CODE END WHILE */
@@ -359,7 +359,7 @@ uint8_t DHT22_Read (void)
 }
 void delay (uint16_t time)
 {
-	/* change your code here for the delay in microseconds */
+	/* delay in microseconds */
 	__HAL_TIM_SET_COUNTER(&htim6, 0);
 	while ((__HAL_TIM_GET_COUNTER(&htim6))<time);
 }
